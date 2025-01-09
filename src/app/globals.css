@@ -3,11 +3,17 @@
 @tailwind utilities;
 
 body {
-  font-family: var(--font-geist-mono);
+  font-family: var(--font-roboto-flex);
 }
 
 @layer base {
   :root {
     --radius: 0.5rem;
+  }
+
+  .flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }

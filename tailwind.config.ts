@@ -70,6 +70,10 @@ export default {
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
       },
+      fontFamily: {
+        flex: 'var(--font-roboto-flex)',
+        mono: 'var(--font-roboto-mono)',
+      },
     },
   },
   plugins: [Typography, AspectRatio, ContainerQueries, fluid, Animate],
