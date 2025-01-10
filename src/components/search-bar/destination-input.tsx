@@ -17,8 +17,8 @@ export const DestinationInput: React.FC<DestinationInputProps> = ({
 
   return (
     <div
-      className={`m-1 flex h-12 w-fit flex-1 items-center rounded-lg border-2 border-gray-700 pl-2 hover:bg-white/50 ${
-        isFocused ? 'border-grape-500 bg-white/50' : 'border-transparent'
+      className={`m-1 flex h-12 w-fit flex-1 items-center rounded-lg border-2 pl-2 hover:bg-white/50 ${
+        isFocused ? 'border-grape-400 bg-white/50' : 'border-transparent'
       }`}
     >
       <MapPinIcon
