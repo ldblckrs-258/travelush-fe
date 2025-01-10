@@ -79,7 +79,8 @@ export const DateSelector: React.FC<DateSelectorProps> = ({
           selected={dateRange}
           onSelect={handleSelect}
           disabled={{ before: new Date() }}
-          fromMonth={checkIn || new Date()}
+          fromMonth={new Date()}
+          defaultMonth={checkIn || new Date()}
         />
       </PopoverContent>
     </Popover>
