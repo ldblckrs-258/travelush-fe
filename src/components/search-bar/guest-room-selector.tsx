@@ -50,7 +50,7 @@ export const GuestRoomSelector: React.FC<GuestRoomSelectorProps> = ({
           ...prev.childrenAges,
           ...Array.from(
             { length: value.children - prev.childrenAges.length },
-            () => 0,
+            () => 6,
           ),
         ],
       }));
@@ -83,14 +83,18 @@ export const GuestRoomSelector: React.FC<GuestRoomSelectorProps> = ({
       </PopoverTrigger>
       <PopoverContent>
         <ScrollArea
-          className={` ${value.children > 0 ? 'h-[280px]' : 'h-fit'}`}
+          className={` ${value.children > 0 ? 'h-[340px]' : 'h-fit'}`}
         >
           <div className='grid w-fit grid-cols-[1fr,auto] items-center gap-x-8 gap-y-4 p-4 pr-6'>
             <span className='text-sm font-semibold'>Adults</span>
             <NumberSelector
               value={value.adults}
               setValue={(newValue) =>
-                setValue((prev) => ({ ...prev, adults: newValue }))
+                setValue((prev) => ({
+                  ...prev,
+                  adults: newValue,
+                  rooms: Math.min(prev.rooms, newValue),
+                }))
               }
               min={1}
               max={32}
@@ -157,6 +161,23 @@ export const GuestRoomSelector: React.FC<GuestRoomSelectorProps> = ({
                 }
               />
             </div>
+            <Separator
+              className='col-span-2 h-[1px] w-full bg-grape-400/30'
+              orientation='horizontal'
+            />
+            <span className='text-sm font-semibold'>Rooms</span>
+            <NumberSelector
+              value={value.rooms}
+              setValue={(newValue) =>
+                setValue((prev) => ({
+                  ...prev,
+                  rooms: newValue,
+                  adults: Math.max(prev.adults, newValue),
+                }))
+              }
+              min={1}
+              max={6}
+            />
           </div>
         </ScrollArea>
       </PopoverContent>

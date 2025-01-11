@@ -1,4 +1,6 @@
 import { ThemeProvider } from '@/components/theme-provider';
+import ContextCompose from '@/contexts/compose'; // Import ContextCompose
+import { GlobalProvider } from '@/contexts/global-context';
 import type { Metadata } from 'next';
 import { robotoFlex, robotoMono } from './fonts';
 import './globals.css';
@@ -19,14 +21,22 @@ export default function RootLayout({
       <body
         className={`${robotoFlex.variable} ${robotoMono.variable} antialiased`}
       >
-        <ThemeProvider
-          attribute='class'
-          defaultTheme='system'
-          enableSystem
-          disableTransitionOnChange
+        <ContextCompose
+          components={[
+            (props) => (
+              <ThemeProvider
+                attribute='class'
+                defaultTheme='system'
+                enableSystem
+                disableTransitionOnChange
+                {...props}
+              />
+            ),
+            GlobalProvider,
+          ]}
         >
           {children}
-        </ThemeProvider>
+        </ContextCompose>
       </body>
     </html>
   );
