@@ -1,11 +1,11 @@
-'use client';
+'use client'
 
-import SimpleAlert from '@/components/common/simple-alert';
-import { useFormik } from 'formik';
-import { ChevronLeftIcon } from 'lucide-react';
-import { AnimatePresence, motion } from 'motion/react';
-import Link from 'next/link';
-import * as Yup from 'yup';
+import SimpleAlert from '@/components/common/simple-alert'
+import { useFormik } from 'formik'
+import { ChevronLeftIcon } from 'lucide-react'
+import { AnimatePresence, motion } from 'motion/react'
+import Link from 'next/link'
+import * as Yup from 'yup'
 
 export default function SigninPage() {
   const formik = useFormik({
@@ -34,8 +34,8 @@ export default function SigninPage() {
     },
     validateOnBlur: true,
     validateOnChange: false,
-    isInitialValid: false,
-  });
+    validateOnMount: false,
+  })
 
   return (
     <section className="relative flex size-full h-dvh items-center justify-center overflow-hidden bg-[url('/png/login-bg.avif')] bg-cover px-2 py-6 md:px-12 lg:justify-end lg:p-0">
@@ -215,11 +215,11 @@ export default function SigninPage() {
         </AnimatePresence>
       </div>
     </section>
-  );
+  )
 }
 
 const AlertMotion = {
   initial: { y: 10 },
   animate: { y: 0 },
   exit: { x: -20, opacity: 0 },
-};
+}

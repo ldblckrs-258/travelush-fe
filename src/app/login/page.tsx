@@ -1,11 +1,13 @@
-'use client';
+'use client'
 
-import GoogleIcon from '@/components/common/google-icon';
-import { useFormik } from 'formik';
-import { ChevronLeftIcon } from 'lucide-react';
-import { motion } from 'motion/react';
-import Link from 'next/link';
-import * as Yup from 'yup';
+import GoogleIcon from '@/components/common/google-icon'
+import { authenticate } from '@/utils/server-actions'
+import { useFormik } from 'formik'
+import { ChevronLeftIcon } from 'lucide-react'
+import { motion } from 'motion/react'
+import { signIn } from 'next-auth/react'
+import Link from 'next/link'
+import * as Yup from 'yup'
 
 export default function LoginPage() {
   const formik = useFormik({
@@ -17,13 +19,13 @@ export default function LoginPage() {
       email: Yup.string().required('Email is required'),
       password: Yup.string().required('Password is required'),
     }),
-    onSubmit: () => {
-      // Handle form submission
+    onSubmit: async (credentials) => {
+      await authenticate(credentials.email, credentials.password)
     },
     validateOnBlur: true,
-    validateOnChange: false,
-    isInitialValid: false,
-  });
+    validateOnChange: true,
+    validateOnMount: false,
+  })
 
   return (
     <section className="relative flex size-full h-dvh items-center justify-center overflow-hidden bg-[url('/png/login-bg.avif')] bg-cover px-2 py-6 md:px-12 lg:justify-end lg:p-0">
@@ -65,7 +67,7 @@ export default function LoginPage() {
               </div>
             </div>
           </div>
-          <form>
+          <form onSubmit={formik.handleSubmit}>
             <div className='space-y-3'>
               <div>
                 <label
@@ -81,6 +83,7 @@ export default function LoginPage() {
                   type='email'
                   {...formik.getFieldProps('email')}
                   autoFocus
+                  autoComplete='email'
                 />
               </div>
               <div className='col-span-full'>
@@ -96,11 +99,12 @@ export default function LoginPage() {
                   placeholder='Type password here...'
                   type='password'
                   {...formik.getFieldProps('password')}
+                  autoComplete='current-password'
                 />
               </div>
               <div className='col-span-full pt-2'>
                 <button
-                  className='inline-flex h-12 w-full items-center justify-center gap-3 rounded-xl bg-grape-900 px-5 py-3 font-medium text-white duration-200 focus:ring-2 focus:ring-grape-700 focus:ring-offset-2 enabled:hover:bg-grape-700 disabled:cursor-not-allowed disabled:opacity-70'
+                  className='inline-flex h-12 w-full items-center justify-center gap-3 rounded-xl bg-grape-900 px-5 py-3 font-medium text-white duration-200 focus:ring-2 focus:ring-grape-700 focus:ring-offset-2 enabled:hover:bg-grape-700 disabled:opacity-70'
                   type='submit'
                   disabled={!formik.isValid}
                 >
@@ -123,5 +127,5 @@ export default function LoginPage() {
         </div>
       </motion.div>
     </section>
-  );
+  )
 }

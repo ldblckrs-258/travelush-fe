@@ -1,6 +1,11 @@
+export enum UserRole {
+  ADMIN = 'admin',
+  USER = 'user',
+}
 export interface IUser {
-  id: number;
-  name: string;
-  email: string;
-  avatar: string;
+  _id: string
+  email: string
+  avatar: string
+  role: UserRole
+  isVerified: boolean
 }
