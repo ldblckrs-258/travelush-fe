@@ -2,7 +2,7 @@ import axios from 'axios'
 import NextAuth from 'next-auth'
 import Credentials from 'next-auth/providers/credentials'
 import { IServerError } from './interfaces/errors'
-import { UserRole } from './interfaces/user'
+import { IUser, UserRole } from './interfaces/user'
 import { InvalidLoginError } from './utils/errors'
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
@@ -37,22 +37,33 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           }
         }
 
-        const user = res.data
+        const data = res.data.data
 
-        if (!user) {
-          console.log('NO USER')
+        if (!data) {
           throw new InvalidLoginError(
             'Server Error',
             'An error occurred while trying to login',
           )
         }
 
-        return user
+        return data
       },
     }),
   ],
   pages: {
     signIn: '/login',
-    signOut: '/logout',
+  },
+  callbacks: {
+    jwt({ token, user }) {
+      if (user) {
+        token.user = user as IUser
+      }
+      return token
+    },
+    session({ session, token }) {
+      ;(session.user as IUser) = token.user
+      session.access_token = token.access_token
+      return session
+    },
   },
 })

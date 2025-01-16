@@ -1,12 +1,12 @@
-import { ComponentType, ReactNode } from 'react';
+import { ComponentType, ReactNode } from 'react'
 
 interface ContextComposeProps {
-  components: ComponentType<{ children: ReactNode }>[];
-  children: ReactNode;
+  components: ComponentType<{ children: ReactNode }>[]
+  children: ReactNode
 }
 
 export default function ContextCompose(props: ContextComposeProps) {
-  const { components = [], children } = props;
+  const { components = [], children } = props
   return (
     <>
       {components.reduceRight<ReactNode>(
@@ -16,5 +16,5 @@ export default function ContextCompose(props: ContextComposeProps) {
         children,
       )}
     </>
-  );
+  )
 }

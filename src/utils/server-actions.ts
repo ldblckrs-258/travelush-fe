@@ -1,9 +1,17 @@
 'use server'
 
 import { signIn } from '@/auth'
-import { redirect } from 'next/navigation'
 
-export async function authenticate(email: string, password: string) {
+export interface AuthResult {
+  success: boolean
+  errorType?: string
+  message?: string
+}
+
+export async function authenticate(
+  email: string,
+  password: string,
+): Promise<AuthResult> {
   try {
     await signIn('credentials', {
       email,
@@ -11,10 +19,12 @@ export async function authenticate(email: string, password: string) {
       redirect: false,
     })
 
-    console.log('Authenticated successfully')
-
-    redirect('/')
+    return { success: true }
   } catch (error: any) {
-    return { message: error.message, name: error.name, type: error.type }
+    return {
+      success: false,
+      errorType: error.type,
+      message: error?.message || 'An error occurred',
+    }
   }
 }

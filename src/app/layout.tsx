@@ -1,19 +1,19 @@
-import { ThemeProvider } from '@/components/theme-provider';
-import ContextCompose from '@/contexts/compose'; // Import ContextCompose
-import { GlobalProvider } from '@/contexts/global-context';
-import type { Metadata } from 'next';
-import { robotoFlex, robotoMono } from './fonts';
-import './globals.css';
+import { ThemeProvider } from '@/components/theme-provider'
+import ContextCompose from '@/contexts/compose' // Import ContextCompose
+import { GlobalProvider } from '@/contexts/global-context'
+import type { Metadata } from 'next'
+import { robotoFlex, robotoMono } from './fonts'
+import './globals.css'
 
 export const metadata: Metadata = {
   title: 'Travelush - Travel the world',
   description: 'Helping you book your next trip',
-};
+}
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
     <html lang='en' suppressHydrationWarning>
@@ -39,5 +39,5 @@ export default function RootLayout({
         </ContextCompose>
       </body>
     </html>
-  );
+  )
 }

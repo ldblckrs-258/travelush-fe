@@ -5,11 +5,13 @@ import { authenticate } from '@/utils/server-actions'
 import { useFormik } from 'formik'
 import { ChevronLeftIcon } from 'lucide-react'
 import { motion } from 'motion/react'
-import { signIn } from 'next-auth/react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 import * as Yup from 'yup'
 
 export default function LoginPage() {
+  const router = useRouter()
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -20,7 +22,16 @@ export default function LoginPage() {
       password: Yup.string().required('Password is required'),
     }),
     onSubmit: async (credentials) => {
-      await authenticate(credentials.email, credentials.password)
+      const result = await authenticate(credentials.email, credentials.password)
+      if (result.success) {
+        router.push('/')
+        toast.success('Logged in successfully')
+      } else {
+        toast.error(result.message)
+        if (result.errorType === 'Forbidden') {
+          router.push('/active/send?sent=false&email=' + credentials.email)
+        }
+      }
     },
     validateOnBlur: true,
     validateOnChange: true,

@@ -1,43 +1,38 @@
-import { useLogout } from '@/hooks/use-logout';
-import axios, { AxiosRequestConfig, Method } from 'axios';
-import { useEffect, useState } from 'react';
+import { useLogout } from '@/hooks/use-logout'
+import axios, { AxiosRequestConfig, Method } from 'axios'
+import { useSession } from 'next-auth/react'
+import { useEffect, useState } from 'react'
 
 interface HookProps extends AxiosRequestConfig {
-  method: Method;
-  url?: string;
-  queryParams?: object;
-  body?: any;
-  local?: boolean;
-  onSuccessMessage?: string;
-  hideErrorMessage?: boolean;
-  onSuccess?: (data: any) => void;
-  onError?: (error: any, data: any) => void;
-  isPublic?: boolean;
+  method: Method
+  url?: string
+  queryParams?: object
+  body?: any
+  local?: boolean
+  onSuccessMessage?: string
+  hideErrorMessage?: boolean
+  onSuccess?: (data: any) => void
+  onError?: (error: any, data: any) => void
+  isPublic?: boolean
 }
 
 interface RequestProps {
-  url?: string;
-  queryParams?: object;
-  body?: any;
+  url?: string
+  queryParams?: object
+  body?: any
 }
 
 const useRequest = (hookProps: HookProps) => {
-  const [pending, setPending] = useState(false);
-  const { handleLogout } = useLogout();
-  const [refetchCount, setRefetchCount] = useState(0);
+  const [pending, setPending] = useState(false)
+  const { handleLogout } = useLogout()
+  const [refetchCount, setRefetchCount] = useState(0)
+  const { data: session } = useSession()
 
   const request = async (props?: RequestProps) => {
-    setPending(true);
+    setPending(true)
 
     try {
-      const token = window.localStorage.getItem('access_token');
-
-      if (!token) {
-        setTimeout(() => {
-          console.error('Token is still null. Reloading the page...');
-          window.location.reload();
-        }, 700);
-      }
+      const token = session?.access_token
 
       const response = await axios({
         baseURL: hookProps.local ? 'en/api/' : process.env.NEXT_PUBLIC_API_URL,
@@ -50,34 +45,34 @@ const useRequest = (hookProps: HookProps) => {
           'Content-Type':
             hookProps.headers?.['Content-Type'] || 'application/json',
         },
-      });
-      hookProps.onSuccess && hookProps.onSuccess(response);
+      })
+      hookProps.onSuccess && hookProps.onSuccess(response)
     } catch (error: any) {
-      hookProps.onError && hookProps.onError(error, error.response?.data);
+      hookProps.onError && hookProps.onError(error, error.response?.data)
 
       if (error.response?.status === 401 || error.response?.status === 403) {
-        handleLogout();
+        handleLogout()
       }
 
-      setPending(false);
-      return false;
+      setPending(false)
+      return false
     }
 
-    setPending(false);
-    return true;
-  };
+    setPending(false)
+    return true
+  }
 
   useEffect(() => {
     if (refetchCount > 0) {
-      request();
+      request()
     }
-  }, [refetchCount]);
+  }, [refetchCount])
 
   const refetch = () => {
-    setRefetchCount((prevCount) => prevCount + 1);
-  };
+    setRefetchCount((prevCount) => prevCount + 1)
+  }
 
-  return { request, pending, refetch };
-};
+  return { request, pending, refetch }
+}
 
-export default useRequest;
+export default useRequest
