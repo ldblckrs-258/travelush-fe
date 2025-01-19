@@ -1,25 +1,25 @@
-'use client';
-import { useCookie } from '@/hooks/use-cookies';
-import { cn } from '@/lib/utils';
-import { CookieIcon } from 'lucide-react';
-import { AnimatePresence, motion, type HTMLMotionProps } from 'motion/react';
-import { useEffect, useState, type ReactNode } from 'react';
-import { Button } from '../ui/button';
+'use client'
+import { useCookie } from '@/hooks/use-cookies'
+import { cn } from '@/lib/utils'
+import { CookieIcon } from 'lucide-react'
+import { AnimatePresence, motion, type HTMLMotionProps } from 'motion/react'
+import { useEffect, useState, type ReactNode } from 'react'
+import { Button } from '../ui/button'
 export function SimpleCookieBanner({
   children,
   className,
   ...props
 }: {
-  children?: ReactNode;
-  className?: string;
+  children?: ReactNode
+  className?: string
 } & HTMLMotionProps<'dialog'>) {
-  const [isClient, setIsClient] = useState(false);
+  const [isClient, setIsClient] = useState(false)
 
   useEffect(() => {
-    setIsClient(true);
-  }, []);
+    setIsClient(true)
+  }, [])
 
-  const defaultConsent = { consent: false, marketing: false, declined: false };
+  const defaultConsent = { consent: false, marketing: false, declined: false }
 
   const [consentCookieValue, setConsentCookieValue] = useCookie(
     'consent_cookie',
@@ -29,9 +29,9 @@ export function SimpleCookieBanner({
       sameSite: 'lax',
       secure: true,
     },
-  );
+  )
 
-  if (!isClient) return null;
+  if (!isClient) return null
 
   return (
     <>
@@ -60,7 +60,7 @@ export function SimpleCookieBanner({
             )}
             {...props}
           >
-            <div className='flex items-center gap-3 text-grape-950'>
+            <div className='flex items-center gap-3 text-grape-950 dark:text-grape-400'>
               <CookieIcon size={24} />
               <p id='cookie-banner-description'>{children}</p>
             </div>
@@ -74,7 +74,7 @@ export function SimpleCookieBanner({
                     consent: true,
                     marketing: true,
                     declined: false,
-                  });
+                  })
                 }}
               >
                 Accept
@@ -87,20 +87,20 @@ export function SimpleCookieBanner({
                     consent: true,
                     marketing: false,
                     declined: false,
-                  });
+                  })
                 }}
               >
                 Necessary Only
               </Button>
               <Button
-                className='hover:bg-transparent hover:text-cupid-600'
+                className='hover:bg-transparent hover:text-cupid-600 dark:hover:bg-transparent dark:hover:text-cupid-500'
                 variant='ghost'
                 onClick={() => {
                   setConsentCookieValue({
                     consent: false,
                     marketing: false,
                     declined: true,
-                  });
+                  })
                 }}
               >
                 Decline
@@ -110,7 +110,7 @@ export function SimpleCookieBanner({
         )}
       </AnimatePresence>
     </>
-  );
+  )
 }
 
-export default SimpleCookieBanner;
+export default SimpleCookieBanner

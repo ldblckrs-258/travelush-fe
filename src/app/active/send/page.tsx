@@ -1,5 +1,6 @@
 'use client'
 
+import useRequest from '@/hooks/use-request'
 import { ChevronLeftIcon, Loader2Icon } from 'lucide-react'
 import { motion } from 'motion/react'
 import Link from 'next/link'
@@ -10,21 +11,25 @@ import { toast } from 'sonner'
 export default function LoginPage() {
   const [isButtonDisabled, setIsButtonDisabled] = useState(false)
   const [countdown, setCountdown] = useState(0)
-  const [pending, setPending] = useState(false)
   const searchParams = useSearchParams()
 
   const [email, setEmail] = useState(searchParams.get('email') || '')
 
   const isJustSent = searchParams.get('sent') === 'true'
 
-  const resendConfirmationMail = async () => {
-    setIsButtonDisabled(true)
-    setPending(true)
-    await new Promise((resolve) => setTimeout(resolve, 3000))
-    toast.success('Confirmation mail sent successfully')
-    setPending(false)
-    setCountdown(60)
-  }
+  const { request, pending } = useRequest({
+    url: '/auth/refresh-code',
+    method: 'get',
+    queryParams: { email },
+    onSuccess: (res) => {
+      setIsButtonDisabled(true)
+      toast.success(res.data.message)
+      setCountdown(60)
+    },
+    onError: (error) => {
+      toast.error(error?.response?.data?.message || error.message)
+    },
+  })
 
   useEffect(() => {
     if (countdown > 0) {
@@ -78,7 +83,7 @@ export default function LoginPage() {
             <button
               className='flex h-12 w-full items-center justify-center gap-3 rounded-xl bg-grape-900 px-5 py-3 font-medium text-white duration-200 focus:ring-2 focus:ring-grape-700 focus:ring-offset-2 enabled:hover:bg-grape-700 disabled:opacity-70'
               type='button'
-              onClick={resendConfirmationMail}
+              onClick={() => request()}
               disabled={isButtonDisabled}
             >
               {pending ? (

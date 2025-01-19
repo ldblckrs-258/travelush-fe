@@ -3,15 +3,20 @@
 import GoogleIcon from '@/components/common/google-icon'
 import { authenticate } from '@/utils/server-actions'
 import { useFormik } from 'formik'
-import { ChevronLeftIcon } from 'lucide-react'
+import { ChevronLeftIcon, Loader2Icon } from 'lucide-react'
 import { motion } from 'motion/react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import * as Yup from 'yup'
 
 export default function LoginPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const emailFromRegister = searchParams.get('email')
+  const [pending, setPending] = useState(false)
+
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -22,7 +27,9 @@ export default function LoginPage() {
       password: Yup.string().required('Password is required'),
     }),
     onSubmit: async (credentials) => {
+      setPending(true)
       const result = await authenticate(credentials.email, credentials.password)
+      setPending(false)
       if (result.success) {
         router.push('/')
         toast.success('Logged in successfully')
@@ -37,6 +44,12 @@ export default function LoginPage() {
     validateOnChange: true,
     validateOnMount: false,
   })
+
+  useEffect(() => {
+    if (emailFromRegister) {
+      formik.setFieldValue('email', emailFromRegister)
+    }
+  }, [emailFromRegister])
 
   return (
     <section className="relative flex size-full h-dvh items-center justify-center overflow-hidden bg-[url('/png/login-bg.avif')] bg-cover px-2 py-6 md:px-12 lg:justify-end lg:p-0">
@@ -119,7 +132,11 @@ export default function LoginPage() {
                   type='submit'
                   disabled={!formik.isValid}
                 >
-                  Sign in
+                  {pending ? (
+                    <Loader2Icon size={24} className='animate-spin' />
+                  ) : (
+                    'Sign in'
+                  )}
                 </button>
               </div>
             </div>

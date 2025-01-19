@@ -2,6 +2,7 @@ import { ThemeProvider } from '@/components/theme-provider'
 import ContextCompose from '@/contexts/compose' // Import ContextCompose
 import { GlobalProvider } from '@/contexts/global-context'
 import type { Metadata } from 'next'
+import { SessionProvider } from 'next-auth/react'
 import { robotoFlex, robotoMono } from './fonts'
 import './globals.css'
 
@@ -21,22 +22,24 @@ export default function RootLayout({
       <body
         className={`${robotoFlex.variable} ${robotoMono.variable} antialiased`}
       >
-        <ContextCompose
-          components={[
-            (props) => (
-              <ThemeProvider
-                attribute='class'
-                defaultTheme='system'
-                enableSystem
-                disableTransitionOnChange
-                {...props}
-              />
-            ),
-            GlobalProvider,
-          ]}
-        >
-          {children}
-        </ContextCompose>
+        <SessionProvider>
+          <ContextCompose
+            components={[
+              (props) => (
+                <ThemeProvider
+                  attribute='class'
+                  defaultTheme='system'
+                  enableSystem
+                  disableTransitionOnChange
+                  {...props}
+                />
+              ),
+              GlobalProvider,
+            ]}
+          >
+            {children}
+          </ContextCompose>
+        </SessionProvider>
       </body>
     </html>
   )

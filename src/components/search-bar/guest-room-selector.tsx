@@ -1,13 +1,13 @@
-'use client';
+'use client'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Separator } from '@/components/ui/separator';
-import { IGuestRoom } from '@/interfaces/guest-room.interface';
-import { UsersIcon } from 'lucide-react';
+} from '@/components/ui/popover'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { Separator } from '@/components/ui/separator'
+import { IGuestRoom } from '@/interfaces/guest-room.interface'
+import { UsersIcon } from 'lucide-react'
 import {
   Dispatch,
   Fragment,
@@ -15,34 +15,34 @@ import {
   useEffect,
   useMemo,
   useState,
-} from 'react';
-import { Checkbox } from '../ui/checkbox';
-import { NumberSelector } from './number-selector';
+} from 'react'
+import { Checkbox } from '../ui/checkbox'
+import { NumberSelector } from './number-selector'
 
 interface GuestRoomSelectorProps {
-  value: IGuestRoom;
-  setValue: Dispatch<SetStateAction<IGuestRoom>>;
+  value: IGuestRoom
+  setValue: Dispatch<SetStateAction<IGuestRoom>>
 }
 
 export const GuestRoomSelector: React.FC<GuestRoomSelectorProps> = ({
   value,
   setValue,
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false)
   const displayText = useMemo(() => {
     return `${value.adults + value.children} ${value.adults + value.children > 1 ? 'guests' : 'guest'}, ${value.rooms} ${
       value.rooms > 1 ? 'rooms' : 'room'
-    }`;
-  }, [value]);
+    }`
+  }, [value])
 
   useEffect(() => {
     if (value.children === 0) {
-      setValue((prev) => ({ ...prev, childrenAges: [] }));
+      setValue((prev) => ({ ...prev, childrenAges: [] }))
     } else if (value.children < value.childrenAges.length) {
       setValue((prev) => ({
         ...prev,
         childrenAges: prev.childrenAges.slice(0, value.children),
-      }));
+      }))
     } else {
       setValue((prev) => ({
         ...prev,
@@ -53,20 +53,20 @@ export const GuestRoomSelector: React.FC<GuestRoomSelectorProps> = ({
             () => 6,
           ),
         ],
-      }));
+      }))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value.children]);
+  }, [value.children])
 
   return (
     <Popover onOpenChange={setIsOpen}>
       <PopoverTrigger>
         <div
-          className={`m-1 flex h-12 items-center rounded-lg border-2 hover:bg-white/50 ${isOpen ? 'border-grape-500/50 bg-white/50' : 'border-transparent'}`}
+          className={`m-1 flex h-12 items-center rounded-lg border-2 hover:bg-white/50 dark:hover:bg-white/5 ${isOpen ? 'border-grape-500/50 bg-white/50 dark:bg-white/5' : 'border-transparent'}`}
         >
           <div className='m-1 flex h-12 w-fit cursor-pointer items-center px-2'>
             <UsersIcon
-              className='mr-4 cursor-pointer text-grape-900'
+              className='mr-4 cursor-pointer text-grape-900 dark:text-grape-400'
               size={20}
               strokeWidth={2}
             />
@@ -74,7 +74,7 @@ export const GuestRoomSelector: React.FC<GuestRoomSelectorProps> = ({
               <div className='cursor-pointer text-left font-mono text-xs leading-3 tracking-tight text-kimberly-500'>
                 Guests & Rooms
               </div>
-              <div className='text-sm font-semibold leading-4 tracking-wide text-slate-800'>
+              <div className='text-sm font-semibold leading-4 tracking-wide text-slate-800 dark:text-kimberly-200'>
                 {displayText}
               </div>
             </div>
@@ -115,7 +115,7 @@ export const GuestRoomSelector: React.FC<GuestRoomSelectorProps> = ({
                   className='col-span-2 h-[1px] w-full bg-grape-400/30'
                   orientation='horizontal'
                 />
-                <span className='col-span-2 -mt-2 text-left text-base font-medium text-slate-900'>
+                <span className='col-span-2 -mt-2 text-left text-base font-medium text-slate-900 dark:text-grape-300'>
                   Children&apos;s ages
                 </span>
                 {Array.from({ length: value.childrenAges.length }).map(
@@ -182,5 +182,5 @@ export const GuestRoomSelector: React.FC<GuestRoomSelectorProps> = ({
         </ScrollArea>
       </PopoverContent>
     </Popover>
-  );
-};
+  )
+}

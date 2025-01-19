@@ -1,28 +1,30 @@
-import { Button } from '@/components/ui/button';
-import { MapPinIcon, XIcon } from 'lucide-react';
-import { Dispatch, useRef, useState } from 'react';
+import { Button } from '@/components/ui/button'
+import { MapPinIcon, XIcon } from 'lucide-react'
+import { Dispatch, useRef, useState } from 'react'
 
 interface DestinationInputProps {
-  value: string;
-  onChange: Dispatch<string>;
+  value: string
+  onChange: Dispatch<string>
 }
 
 export const DestinationInput: React.FC<DestinationInputProps> = ({
   value,
   onChange,
 }) => {
-  const inputRef = useRef<HTMLInputElement>(null);
-  const clearInput = () => onChange('');
-  const [isFocused, setIsFocused] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null)
+  const clearInput = () => onChange('')
+  const [isFocused, setIsFocused] = useState(false)
 
   return (
     <div
-      className={`m-1 flex h-12 w-fit flex-1 items-center rounded-lg border-2 pl-2 hover:bg-white/50 ${
-        isFocused ? 'border-grape-400 bg-white/50' : 'border-transparent'
+      className={`m-1 flex h-12 w-fit flex-1 items-center rounded-lg border-2 pl-2 hover:bg-white/50 dark:hover:bg-white/5 ${
+        isFocused
+          ? 'border-grape-400 bg-white/50 dark:bg-white/5'
+          : 'border-transparent'
       }`}
     >
       <MapPinIcon
-        className='cursor-pointer text-grape-900'
+        className='cursor-pointer text-grape-900 dark:text-grape-400'
         size={20}
         strokeWidth={2}
         onClick={() => inputRef.current?.focus()}
@@ -41,12 +43,12 @@ export const DestinationInput: React.FC<DestinationInputProps> = ({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           onFocus={() => {
-            inputRef.current?.select();
-            setIsFocused(true);
+            inputRef.current?.select()
+            setIsFocused(true)
           }}
           onBlur={() => setIsFocused(false)}
           placeholder='Search for places'
-          className='bg-transparent text-sm font-semibold leading-4 text-slate-800 focus:outline-none'
+          className='bg-transparent text-sm font-semibold leading-4 text-slate-800 focus:outline-none dark:text-kimberly-200'
         />
       </div>
       <Button
@@ -57,5 +59,5 @@ export const DestinationInput: React.FC<DestinationInputProps> = ({
         <XIcon size={20} strokeWidth={3} />
       </Button>
     </div>
-  );
-};
+  )
+}

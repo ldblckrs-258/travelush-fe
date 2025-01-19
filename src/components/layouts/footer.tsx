@@ -1,15 +1,15 @@
-import { cn } from '@/lib/utils';
-import { FacebookIcon, InstagramIcon, TwitterIcon } from 'lucide-react';
-import Image from 'next/image';
-import Link from 'next/link';
-import type { ComponentProps } from 'react';
-import { Button } from '../ui/button';
+import { cn } from '@/lib/utils'
+import { FacebookIcon, InstagramIcon, TwitterIcon } from 'lucide-react'
+import Image from 'next/image'
+import Link from 'next/link'
+import type { ComponentProps } from 'react'
+import { Button } from '../ui/button'
 
 export function Footer({
   className,
   ...props
 }: {
-  className?: string;
+  className?: string
 } & ComponentProps<'div'>) {
   return (
     <div
@@ -19,7 +19,7 @@ export function Footer({
     >
       <footer
         className={cn(
-          `fixed bottom-0 h-fit w-full bg-kimberly-300 px-20`,
+          `fixed bottom-0 h-fit w-full bg-kimberly-300 px-20 dark:bg-[#29233b]`,
           className,
         )}
       >
@@ -54,9 +54,9 @@ export function Footer({
               </Link>
             </div>
           </div>
-          <div className='mt-4 flex flex-1 justify-between gap-8 [&>div>a]:text-sm [&>div>a]:text-kimberly-900'>
+          <div className='mt-4 flex flex-1 justify-between gap-8 [&>div>a]:text-sm [&>div>a]:text-kimberly-900 dark:[&>div>a]:text-kimberly-500'>
             <div className='flex flex-1 flex-col gap-2'>
-              <h3 className='mb-2 font-semibold uppercase text-grape-800'>
+              <h3 className='mb-2 font-semibold uppercase text-grape-800 dark:text-grape-400'>
                 Support
               </h3>
               <Link href='./'>Contact Us</Link>
@@ -66,7 +66,7 @@ export function Footer({
             </div>
 
             <div className='flex flex-1 flex-col gap-2'>
-              <h3 className='mb-2 font-semibold uppercase text-grape-800'>
+              <h3 className='mb-2 font-semibold uppercase text-grape-800 dark:text-grape-400'>
                 Explore
               </h3>
               <Link href='./'>Destinations</Link>
@@ -76,7 +76,7 @@ export function Footer({
             </div>
 
             <div className='flex flex-1 flex-col gap-2'>
-              <h3 className='mb-2 font-semibold uppercase text-grape-800'>
+              <h3 className='mb-2 font-semibold uppercase text-grape-800 dark:text-grape-400'>
                 Legal
               </h3>
               <Link href='./'>Privacy Policy</Link>
@@ -88,5 +88,5 @@ export function Footer({
         </div>
       </footer>
     </div>
-  );
+  )
 }

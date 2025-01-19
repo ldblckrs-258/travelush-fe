@@ -1,22 +1,26 @@
 'use client'
 
 import SimpleAlert from '@/components/common/simple-alert'
+import useRequest from '@/hooks/use-request'
 import { useFormik } from 'formik'
-import { ChevronLeftIcon } from 'lucide-react'
+import { ChevronLeftIcon, Loader2Icon } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 import * as Yup from 'yup'
 
 export default function SigninPage() {
+  const router = useRouter()
   const formik = useFormik({
     initialValues: {
-      fullName: '',
+      name: '',
       email: '',
       password: '',
       confirmPassword: '',
     },
     validationSchema: Yup.object({
-      fullName: Yup.string()
+      name: Yup.string()
         .min(3, 'Full name must be at least 3 characters')
         .required('Full name is required'),
       email: Yup.string()
@@ -30,11 +34,23 @@ export default function SigninPage() {
         .required('Confirm Password is required'),
     }),
     onSubmit: () => {
-      // Handle form submission
+      request()
     },
-    validateOnBlur: true,
-    validateOnChange: false,
+    validateOnChange: true,
     validateOnMount: false,
+  })
+
+  const { request, pending } = useRequest({
+    url: '/auth/register',
+    method: 'post',
+    body: formik.values,
+    onSuccess: () => {
+      toast.success('Account created successfully')
+      router.push(`/active/send?sent=true&email=${formik.values.email}`)
+    },
+    onError: (error) => {
+      toast.error(error?.response?.data?.message || error.message)
+    },
   })
 
   return (
@@ -65,21 +81,21 @@ export default function SigninPage() {
               <div>
                 <label
                   className='mb-3 block text-sm font-medium text-black'
-                  htmlFor='full-name'
+                  htmlFor='name'
                 >
                   Full Name
                 </label>
                 <input
                   className={`block h-12 w-full appearance-none rounded-xl px-4 py-2 text-grape-600 placeholder-kimberly-500 duration-200 focus:outline-none focus:ring-neutral-300 sm:text-sm ${
-                    formik.touched.fullName && formik.errors.fullName
+                    formik.touched.name && formik.errors.name
                       ? 'border border-cupid-500 bg-cupid-100/90'
                       : 'bg-white/80'
                   }`}
-                  id='full-name'
+                  id='name'
                   placeholder='Type full name here...'
                   type='text'
-                  {...formik.getFieldProps('fullName')}
-                  onFocus={() => formik.setFieldError('fullName', '')}
+                  {...formik.getFieldProps('name')}
+                  onFocus={() => formik.setFieldError('name', '')}
                 />
               </div>
               <div>
@@ -148,9 +164,13 @@ export default function SigninPage() {
                 <button
                   className='inline-flex h-12 w-full items-center justify-center gap-3 rounded-xl bg-grape-900 px-5 py-3 font-medium text-white duration-200 focus:ring-2 focus:ring-grape-700 focus:ring-offset-2 enabled:hover:bg-grape-700 disabled:cursor-not-allowed disabled:opacity-70'
                   type='submit'
-                  disabled={!formik.isValid}
+                  disabled={!formik.isValid || pending}
                 >
-                  Register
+                  {pending ? (
+                    <Loader2Icon size={24} className='animate-spin' />
+                  ) : (
+                    'Register'
+                  )}
                 </button>
               </div>
             </div>
@@ -170,12 +190,12 @@ export default function SigninPage() {
       </motion.div>
       <div className='absolute bottom-6 right-1/2 min-w-[280px] translate-x-1/2 space-y-1'>
         <AnimatePresence>
-          {formik.touched.fullName && formik.errors.fullName ? (
-            <motion.div className='' key='error-full-name' {...AlertMotion}>
+          {formik.touched.name && formik.errors.name ? (
+            <motion.div className='' key='error-name' {...AlertMotion}>
               <SimpleAlert
                 className='mt-2 bg-cupid-50/60 backdrop-blur-xl'
                 title='Invalid full name'
-                description={formik.errors.fullName}
+                description={formik.errors.name}
               />
             </motion.div>
           ) : null}

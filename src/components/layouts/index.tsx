@@ -8,9 +8,9 @@ export default function MainLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className='relative min-h-dvh w-full bg-kimberly-300 dark:bg-[#171420] dark:text-kimberly-50'>
-      <Header className='fixed left-0 top-0 z-10 h-16 bg-white/60 backdrop-blur-xl' />
-      <div className='w-full overflow-hidden rounded-b-3xl bg-white bg-cover bg-center'>
+    <div className='relative min-h-dvh w-full bg-kimberly-300 dark:bg-[#29233b] dark:text-kimberly-200'>
+      <Header className='fixed left-0 top-0 z-10 h-16 bg-white/60 backdrop-blur-xl dark:bg-white/5' />
+      <div className='w-full overflow-hidden rounded-b-3xl bg-white bg-cover bg-center dark:bg-[#0e091c]'>
         {children}
       </div>
       <Footer />
